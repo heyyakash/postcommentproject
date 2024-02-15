@@ -21,9 +21,17 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find({}).populate({
+        const posts = await Post.find({})
+        .populate({
             path:"author",
             select:"-password"
+        })
+        .populate({
+            path:'comments',
+            populate:{
+                path:"author",
+                select:"-password"
+            }
         })
         res.status(200).json({ status: true, results: posts.length, posts })
     } catch (err) {

@@ -23,41 +23,6 @@
                 Post</button>
         </form>
         <div id="root" class="flex flex-col">
-            <div class="flex flex-col p-4 gap-2 border-b-2 border-slate-700">
-                <p class="text-lg font-semibold flex items-center gap-2">
-                    <img src="https://github.com/identicons/akashsharma.png" class="rounded-full h-10 w-10 object-cover"
-                        alt="avatar">
-                    Akash Sharma posted
-                </p>
-                <div>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos error repellat unde ducimus sed,
-                    natus ex dolor adipisci deserunt perferendis.
-                </div>
-                <form id="commentForm" class=" flex gap-2 mt-2">
-                    <input type="text" placeholder="Comment something..." name="comment" id="comment"
-                        class="w-full bg-transparent border-2 border-slate-700 p-2 text-lg font-medium" />
-                    <button type="submit" class="bg-indigo-400  w-[50px]"><i class="ri-send-plane-fill"></i></button>
-                </form>
-                <div class="flex flex-col gap-2">
-                    <p class="text-lg font-semibold mb-2">Comments</p>
-              
-                    <div class="flex flex-col gap-2">
-                        <p class="text-lg font-semibold flex items-center gap-2">
-                            <img src="https://github.com/identicons/akashsharma.png"
-                                class="rounded-full h-10 w-10 object-cover" alt="avatar">
-                            Akash Sharma commented
-                        </p>
-                        <div>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos error repellat unde ducimus
-                            sed,
-                            natus ex dolor adipisci deserunt perferendis.
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-
         </div>
         </div>
     </main>
@@ -65,13 +30,95 @@
 <script type="text/javascript">
     const root = document.getElementById("root")
     const fetchPosts = async () => {
-        const response = await fetch("/post"); // Corrected this line
-        const data = await response.json();    // Corrected this line
-        const { posts } = data;                // Corrected this line
-        console.log(posts);
+        const response = await fetch("/post")
+        const data = await response.json()
+        const { posts } = data
+        console.log(posts)
+        posts.map((x, i) => {
+            container = createPostElement(x)
+            root.appendChild(container)
+        })
+
     }
 
     fetchPosts()
+
+
+    const createPostElement = (post) => {
+        const container = document.createElement('div')
+        container.classList.add('flex', 'flex-col', 'p-4', 'gap-2', 'border-b-2', 'border-slate-700')
+
+        const authorInfo = document.createElement('p')
+        authorInfo.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2')
+        authorInfo.innerHTML = `<img src="${post.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${post.author.name} posted`
+
+        container.appendChild(authorInfo)
+
+        const content = document.createElement('div')
+        content.textContent = post.content
+        container.append(content)
+
+        const commentForm = document.createElement('form')
+        commentForm.id = 'commentForm';
+        commentForm.classList.add('flex', 'gap-2', 'mt-2')
+        commentForm.addEventListener('submit', async function (e) {
+            e.preventDefault()
+            const formdata = new FormData(this)
+            const comment = formdata.get("comment")
+            const payload = {
+                comment,
+                id: post._id
+            }
+            const res = await fetch('/comment/create', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            const result = res.json()
+            if (result.status){
+                fetchPosts()
+            }
+        })
+        commentForm.innerHTML = `
+        <input type="text" required placeholder="Comment something..." name="comment" id="comment"
+            class="w-full bg-transparent border-2 border-slate-700 p-2 text-lg font-medium" />
+        <button type="submit" class="bg-indigo-400 w-[50px]"><i class="ri-send-plane-fill"></i></button>`
+
+        container.appendChild(commentForm)
+
+        const commentsSection = document.createElement('div');
+        commentsSection.classList.add('flex', 'flex-col', 'gap-2');
+        const commentsTitle = document.createElement('p');
+        commentsTitle.classList.add('text-lg', 'font-semibold', 'mb-2');
+        commentsTitle.textContent = 'Comments';
+        commentsSection.appendChild(commentsTitle);
+        container.appendChild(commentsSection);
+
+        post.comments.forEach(comment => {
+            const commentContainer = document.createElement('div');
+            commentContainer.classList.add('flex', 'flex-col', 'gap-2');
+            const commentAuthor = document.createElement('p');
+            commentAuthor.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2');
+            commentAuthor.innerHTML = `
+            <img src="${comment.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">
+            ${comment.author.name} commented
+        `
+            commentContainer.appendChild(commentAuthor)
+
+            const commentContent = document.createElement('div')
+            commentContent.textContent = comment.text
+            commentContainer.appendChild(commentContent)
+
+            commentsSection.appendChild(commentContainer)
+        })
+
+        container.appendChild(commentsSection)
+
+        return container
+    }
+
 </script>
 
 </html>

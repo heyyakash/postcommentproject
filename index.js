@@ -3,6 +3,7 @@ const connectToDatabase = require("./helpers/db")
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth.routes")
 const postRouter = require("./routes/post.routes")
+const commentRouter = require("./routes/comment.routes")
 
 const app = express()
 app.use(express.json())
@@ -23,6 +24,7 @@ app.get("/ping", async (req, res) => {
 // Routes
 app.use("/auth",authRouter)
 app.use("/post",postRouter)
+app.use("/comment",commentRouter)
 
 try {
     (async function () {

@@ -9,6 +9,12 @@ const user = new Schema({
         type:String,
         required:true,
     },
+    image:{
+        type:String,
+        default:function(){
+            return `https://github.com/identicons/${this.name.replace(/\s/g,'')}.png`
+        }
+    },
     password:{
         type:String,
         required:true
