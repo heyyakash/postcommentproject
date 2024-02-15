@@ -7,7 +7,14 @@ const postRouter = require("./routes/post.routes")
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
-app.use(express.static("public"))
+
+// serving static files
+app.get("/",async(req,res)=>{
+    res.sendFile(__dirname+'/public/index/index.html')
+})
+app.get("/login",async(req,res)=>{
+    res.sendFile(__dirname+'/public/login/login.html')
+})
 
 app.get("/ping", async (req, res) => {
     res.status(200).json({ message: "pong" })

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Poster App Login</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+        <!-- <link rel = "stylesheet" href = "assets/main.css" /> -->
+    </head>
+</head>
+<body class = "bg-black flex items-center justify-center h-[100vh] text-white">
+    <form id = "login-form" class="flex flex-col gap-2">
+        <h3 class="text-2xl mb-4 font-semibold self-center">Login to Continue</h3>
+        <label for="email">Email</label>
+        <input type="email" class="bg-transparent border-2 p-2 w-[400px] border-slate-500 outline-none" name="email" id="email" />
+        <label for="password">password</label>
+        <input type="password" class="bg-transparent border-2 p-2 w-[400px] border-slate-500 outline-none" name="password" id="password">
+        <button type="submit" class="w-full p-2 text-lg font-medium bg-indigo-400">
+            Login
+        </button>
+    </form>
+</body>
+<script type = "text/javascript">
+    form = document.getElementById("login-form")
+    form.addEventListener("submit",async (e)=>{
+        e.preventDefault()
+        formdata = new FormData(form)
+        const payload = {
+            email: formdata.get("email"),
+            password: formdata.get("password")
+        }
+        const res = await fetch("/auth/login",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+            },
+            body:JSON.stringify(payload)
+        })
+        const result = await res.json()
+        if (res.status){
+            window.location.href  = "/"
+        }else{
+            alert(res.message)
+        }
+    })
+</script>
+</html>

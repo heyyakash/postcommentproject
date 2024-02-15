@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+    <!-- <link rel = "stylesheet" href = "assets/main.css" /> -->
+</head>
+
+<body class="bg-black">
+    <main class="mx-auto border-r-2 border-l-2 border-slate-700  text-white min-h-[100vh] max-w-[900px] w-full">
+        <div class="border-b-2 border-slate-700 p-4">
+            <h3 class="text-2xl font-medium">Post And Comment App</h3>
+        </div>
+        <form class="p-4 flex flex-col items-start gap-3  border-b-2 border-slate-700">
+            <textarea required class="w-full p-2 bg-transparent text-lg"
+                placeholder="What are you feeling today?"></textarea>
+            <button type="submit" class="p-3 w-full bg-indigo-400 text-lg font-medium">
+                <i class="ri-send-plane-fill"></i>
+                Post</button>
+        </form>
+        <div id="root" class="flex flex-col">
+            <div class="flex flex-col p-4 gap-2 border-b-2 border-slate-700">
+                <p class="text-lg font-semibold flex items-center gap-2">
+                    <img src="https://github.com/identicons/akashsharma.png" class="rounded-full h-10 w-10 object-cover"
+                        alt="avatar">
+                    Akash Sharma posted
+                </p>
+                <div>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos error repellat unde ducimus sed,
+                    natus ex dolor adipisci deserunt perferendis.
+                </div>
+                <form id="commentForm" class=" flex gap-2 mt-2">
+                    <input type="text" placeholder="Comment something..." name="comment" id="comment"
+                        class="w-full bg-transparent border-2 border-slate-700 p-2 text-lg font-medium" />
+                    <button type="submit" class="bg-indigo-400  w-[50px]"><i class="ri-send-plane-fill"></i></button>
+                </form>
+                <div class="flex flex-col gap-2">
+                    <p class="text-lg font-semibold mb-2">Comments</p>
+              
+                    <div class="flex flex-col gap-2">
+                        <p class="text-lg font-semibold flex items-center gap-2">
+                            <img src="https://github.com/identicons/akashsharma.png"
+                                class="rounded-full h-10 w-10 object-cover" alt="avatar">
+                            Akash Sharma commented
+                        </p>
+                        <div>
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos error repellat unde ducimus
+                            sed,
+                            natus ex dolor adipisci deserunt perferendis.
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+        </div>
+        </div>
+    </main>
+</body>
+<script type="text/javascript">
+    const root = document.getElementById("root")
+    const fetchPosts = async () => {
+        const response = await fetch("/post"); // Corrected this line
+        const data = await response.json();    // Corrected this line
+        const { posts } = data;                // Corrected this line
+        console.log(posts);
+    }
+
+    fetchPosts()
+</script>
+
+</html>

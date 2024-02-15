@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
         if (!match) return res.status(401).json({ msg: "Wrong Password", status: false })
         const authToken = jwt.sign(existingUser._id.toString(), process.env.JWT_SECRET)
         res.cookie("user", authToken, { httpOnly: true, secure: true, sameSite: "Strict", maxAge: 3600000, path: "/" })
-        res.status(200).json({ message: "Logged In" })
+        res.status(200).json({ message: "Logged In", status:false })
     }
     catch (err) {
         console.log(err)
