@@ -3,7 +3,8 @@ const connectToDatabase = require("./helpers/db")
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth.routes")
 const postRouter = require("./routes/post.routes")
-const commentRouter = require("./routes/comment.routes")
+const commentRouter = require("./routes/comment.routes");
+const LoginNotRequired = require("./middlewares/LoginNotRequired");
 
 const app = express()
 app.use(express.json())
@@ -13,8 +14,11 @@ app.use(cookieParser())
 app.get("/",async(req,res)=>{
     res.sendFile(__dirname+'/public/index/index.html')
 })
-app.get("/login",async(req,res)=>{
+app.get("/login",LoginNotRequired,async(req,res)=>{
     res.sendFile(__dirname+'/public/login/login.html')
+})
+app.get("/signup", LoginNotRequired ,async(req,res)=>{
+    res.sendFile(__dirname+'/public/signup/signup.html')
 })
 
 app.get("/ping", async (req, res) => {

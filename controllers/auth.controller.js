@@ -19,7 +19,7 @@ exports.createAccount = async (req, res) => {
         }
         const authToken = jwt.sign(payload, process.env.JWT_SECRET)
         res.cookie("user", authToken, { httpOnly: true, secure: true, sameSite: "Strict", maxAge: 3600000, path: "/" })
-        res.status(200).json({ message: "Created" })
+        res.status(200).json({ message: "Created",status:true })
     }
     catch (err) {
         console.log(err)
