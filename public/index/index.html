@@ -11,12 +11,16 @@
 </head>
 
 <body class="bg-black">
-    <main class="mx-auto border-r-2 border-l-2 border-slate-700  text-white min-h-[100vh] max-w-[900px] w-full">
-        <div class="border-b-2 border-slate-700 p-4">
+    <main
+        class="mx-auto border-r-2 border-l-2 border-slate-700 overflow-y-auto relative text-white min-h-[100vh] max-w-[900px] w-full">
+        <div
+            class="border-b-2 border-slate-700 p-4 flex justify-between bg-black items-center fixed top-0  bg-black max-w-[895px] w-full  ">
             <h3 class="text-2xl font-medium">Post And Comment App</h3>
+            <p class="flex gap-2 cursor-pointe items-center font-mediumr" id = "user"><a href="/login">Login</a></p>
         </div>
-        <form class="p-4 flex flex-col items-start gap-3  border-b-2 border-slate-700">
-            <textarea required class="w-full p-2 bg-transparent text-lg"
+        <form id="post-form"
+            class="p-4 sticky flex flex-col mt-[4rem] top-0  items-start gap-3  border-b-2 border-slate-700">
+            <textarea name="post" id="post" required class="w-full p-2 bg-transparent text-lg"
                 placeholder="What are you feeling today?"></textarea>
             <button type="submit" class="p-3 w-full bg-indigo-400 text-lg font-medium">
                 <i class="ri-send-plane-fill"></i>
@@ -28,21 +32,42 @@
     </main>
 </body>
 <script type="text/javascript">
+    const userpanel = document.getElementById("user")
     const root = document.getElementById("root")
     const fetchPosts = async () => {
         const response = await fetch("/post")
         const data = await response.json()
         const { posts } = data
         console.log(posts)
-        posts.map((x, i) => {
+        posts.reverse().map((x, i) => {
             container = createPostElement(x)
             root.appendChild(container)
         })
 
     }
-
+    const getUserDetails = async()=>{
+        const res = await fetch('/auth/details')
+        if(res.status===200){
+            const result = await res.json()
+            userpanel.innerHTML = `<img src="${result.user.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${result.user.name} <i onclick = "logout()" class="ri-logout-box-r-line cursor-pointer"></i>`
+        }
+    }
+    getUserDetails()
     fetchPosts()
 
+    const logout = async () => {
+        await fetch("/auth/logout", {
+            method: "POST"
+        })
+    }
+
+    const getdateString = (dateString) => {
+        const date = new Date(dateString)
+        const year = date.getFullYear()
+        const month = ("0" + (date.getMonth() + 1)).slice(-2)
+        const day = ("0" + date.getDate()).slice(-2)
+        return `${day}/${month}/${year}`
+    }
 
     const createPostElement = (post) => {
         const container = document.createElement('div')
@@ -50,7 +75,9 @@
 
         const authorInfo = document.createElement('p')
         authorInfo.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2')
-        authorInfo.innerHTML = `<img src="${post.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${post.author.name} posted`
+        const dateString = getdateString(post.createdAt)
+        
+        authorInfo.innerHTML = `<img src="${post.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${post.author.name} posted <p class = "ml-auto">${dateString}</p>`
 
         container.appendChild(authorInfo)
 
@@ -76,9 +103,8 @@
                 },
                 body: JSON.stringify(payload)
             })
-            const result = res.json()
-            if (result.status){
-                fetchPosts()
+            if (res.status === 200) {
+                window.location.reload()
             }
         })
         commentForm.innerHTML = `
@@ -97,14 +123,12 @@
         container.appendChild(commentsSection);
 
         post.comments.forEach(comment => {
-            const commentContainer = document.createElement('div');
-            commentContainer.classList.add('flex', 'flex-col', 'gap-2');
+            const commentContainer = document.createElement('div')
+            commentContainer.classList.add('flex', 'flex-col', 'gap-2')
             const commentAuthor = document.createElement('p');
-            commentAuthor.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2');
-            commentAuthor.innerHTML = `
-            <img src="${comment.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">
-            ${comment.author.name} commented
-        `
+            commentAuthor.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2')
+            const dateString = getdateString(comment.createdAt)
+            commentAuthor.innerHTML = `<img src="${comment.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar"> ${comment.author.name} commented <p class = "ml-auto">${dateString}</p>`
             commentContainer.appendChild(commentAuthor)
 
             const commentContent = document.createElement('div')
@@ -118,6 +142,28 @@
 
         return container
     }
+    const form = document.getElementById("post-form")
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault()
+        const formdata = new FormData(this)
+        const payload = {
+            content: formdata.get("post")
+        }
+        const res = await fetch('/post/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        if (res.status === 200) {
+            window.location.reload()
+        } else if (res.status == 401) {
+            window.location.href = "/login"
+        } else {
+            console.error('Error:', res.statusText)
+        }
+    })
 
 </script>
 

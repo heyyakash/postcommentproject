@@ -39,10 +39,10 @@
             body:JSON.stringify(payload)
         })
         const result = await res.json()
-        if (res.status){
+        if (result.status){
             window.location.href  = "/"
         }else{
-            alert(res.message)
+            alert(result.message)
         }
     })
 </script>

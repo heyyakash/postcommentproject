@@ -10,6 +10,10 @@ const post = new Schema({
         ref: 'users' ,
         required:'true'
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     comments:[
         {
             type:Schema.Types.ObjectId,
