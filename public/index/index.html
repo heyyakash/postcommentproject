@@ -32,8 +32,9 @@
     </main>
 </body>
 <script type="text/javascript">
-    const fetchPosts = async () => {
 
+    // function to fetch posts
+    const fetchPosts = async () => {
         const response = await fetch("/post")
         const data = await response.json()
         const { posts } = data
@@ -45,6 +46,7 @@
 
     }
 
+    // function to get user details
     const getUserDetails = async () => {
             const res = await fetch('/auth/details')
             if (res.status === 200) {
@@ -84,9 +86,7 @@
         const authorInfo = document.createElement('p')
         authorInfo.classList.add('text-lg', 'font-semibold', 'flex', 'items-center', 'gap-2')
         const dateString = getdateString(post.createdAt)
-
         authorInfo.innerHTML = `<img src="${post.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${post.author.name} posted <p class = "ml-auto">${dateString}</p>`
-
         container.appendChild(authorInfo)
 
         const content = document.createElement('div')
@@ -113,6 +113,8 @@
             })
             if (res.status === 200) {
                 window.location.reload()
+            }else{
+                window.location.href = "/login"
             }
         })
         commentForm.innerHTML = `
