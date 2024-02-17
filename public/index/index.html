@@ -7,7 +7,6 @@
     <title>Poster App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
-    <!-- <link rel = "stylesheet" href = "assets/main.css" /> -->
 </head>
 
 <body class="bg-black">
@@ -55,15 +54,7 @@
             }
     }
 
-
-    fetchPosts()
-    getUserDetails()
-    const userpanel = document.getElementById("user")
-    const root = document.getElementById("root")
-
-
-
-
+    // function to logout
     const logout = async () => {
         await fetch("/auth/logout", {
             method: "POST"
@@ -71,6 +62,7 @@
         window.location.reload()
     }
 
+    // function to get date out of dateString
     const getdateString = (dateString) => {
         const date = new Date(dateString)
         const year = date.getFullYear()
@@ -79,6 +71,7 @@
         return `${day}/${month}/${year}`
     }
 
+    // function to append post element to the ui
     const createPostElement = (post) => {
         const container = document.createElement('div')
         container.classList.add('flex', 'flex-col', 'p-4', 'gap-2', 'border-b-2', 'border-slate-700')
@@ -89,10 +82,12 @@
         authorInfo.innerHTML = `<img src="${post.author.image}" class="rounded-full h-10 w-10 object-cover" alt="avatar">${post.author.name} posted <p class = "ml-auto">${dateString}</p>`
         container.appendChild(authorInfo)
 
+        // append content
         const content = document.createElement('div')
         content.textContent = post.content
         container.append(content)
 
+        // comment form
         const commentForm = document.createElement('form')
         commentForm.id = 'commentForm';
         commentForm.classList.add('flex', 'gap-2', 'mt-2')
@@ -121,9 +116,9 @@
         <input type="text" required placeholder="Comment something..." name="comment" id="comment"
             class="w-full bg-transparent border-2 border-slate-700 p-2 text-lg font-medium" />
         <button type="submit" class="bg-indigo-400 w-[50px]"><i class="ri-send-plane-fill"></i></button>`
-
         container.appendChild(commentForm)
 
+        // create comment section
         const commentsSection = document.createElement('div');
         commentsSection.classList.add('flex', 'flex-col', 'gap-2');
         const commentsTitle = document.createElement('p');
@@ -152,6 +147,8 @@
 
         return container
     }
+
+    // function to create a new post
     const form = document.getElementById("post-form")
     form.addEventListener('submit', async function (e) {
         e.preventDefault()
@@ -174,6 +171,14 @@
             console.error('Error:', res.statusText)
         }
     })
+
+
+    fetchPosts()
+    getUserDetails()
+    const userpanel = document.getElementById("user")
+    const root = document.getElementById("root")
+
+
 
 </script>
 

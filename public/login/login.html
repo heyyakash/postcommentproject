@@ -23,8 +23,12 @@
         New user? <a href = "/signup">signup</a>
     </form>
 </body>
+
 <script type = "text/javascript">
-    form = document.getElementById("login-form")
+
+    const form = document.getElementById("login-form")
+    
+    // Form to send login email and password to the backend
     form.addEventListener("submit",async (e)=>{
         e.preventDefault()
         formdata = new FormData(form)
@@ -46,5 +50,6 @@
             alert(result.message)
         }
     })
+
 </script>
 </html>
