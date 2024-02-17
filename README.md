@@ -14,7 +14,7 @@ Prerequisites:
 Lets get started
 ### Installation using NodeJS
 1. Clone the repository and navigate to the root folder.
-2. Creat a ```.env``` file in root folder
+2. Create a ```.env``` file in root folder
    
    ``` bash
    touch .env
@@ -65,7 +65,14 @@ Lets get started
 ## Underlying Architecture
 ### Stack
 - Backend - **NodeJS**
+  
+  For backend nodejs seemed easy choice because of it developer-friendliness which allows for faster deployment of new features easily
 - Database - **MongoDB**
+
+  Mongo made sense here as it provides complete flexibility over schema (which is a neccessity at early stage) and facilitates faster & accessible development with help of its cloud      clusters
+- Frontend - **Static files served by ExpressJS**
+
+  Using a framework like React/Angular made no sense for lightweight application like this, hence static files were an easy choice.
 ### Flow Chart
 ![Screenshot from 2024-02-17 14-44-07](https://github.com/heyyakash/postcommentproject/assets/85030597/3b94827d-b0e7-4225-8226-c77954700f23)
 ### Database Structure
