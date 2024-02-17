@@ -11,16 +11,14 @@ app.use(express.json())
 app.use(cookieParser())
 
 // serving static files
-app.get("/",async(req,res)=>{
-    res.sendFile(__dirname+'/public/index/index.html')
-})
-app.get("/login",LoginNotRequired,async(req,res)=>{
-    res.sendFile(__dirname+'/public/login/login.html')
-})
-app.get("/signup", LoginNotRequired ,async(req,res)=>{
-    res.sendFile(__dirname+'/public/signup/signup.html')
-})
+// app.get("/",async(req,res)=>{
+//     res.sendFile(__dirname+'/public/index/index.html')
+// })
+app.use('/', express.static("public/index"))
+app.use('/login',LoginNotRequired, express.static("public/login"))
+app.use("/signup", LoginNotRequired ,express.static("public/signup"))  
 
+// testing
 app.get("/ping", async (req, res) => {
     res.status(200).json({ message: "pong" })
 })
@@ -30,6 +28,7 @@ app.use("/auth",authRouter)
 app.use("/post",postRouter)
 app.use("/comment",commentRouter)
 
+// db connection
 try {
     (async function () {
         await connectToDatabase()
