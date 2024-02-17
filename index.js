@@ -33,7 +33,7 @@ try {
     (async function () {
         await connectToDatabase()
         app.listen(8000, () => {
-            console.log("Server is listening at port : 8080")
+            console.log("Server is listening at port : 8000")
         })
     })()
 } catch (err) {
