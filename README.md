@@ -84,6 +84,13 @@ Lets get started
   | Text String | Author (ref users) | CreatedAt Date |
   |-------------|--------------------|----------------|
 
+## How stuff works behind the scenes
+1. Users can view the posts without logging in but if they wish to post or comment something, they have to login.
+2. Users are logged in with a JWT cookie.
+3. Once they are done, they can logout and view again
+
+## Screenshot
+![Screenshot from 2024-02-17 15-00-58](https://github.com/heyyakash/postcommentproject/assets/85030597/47a69dbb-67d2-42d3-ae82-755548b74e4e)
 
 
 
