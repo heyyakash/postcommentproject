@@ -11,9 +11,6 @@ app.use(express.json())
 app.use(cookieParser())
 
 // serving static files
-// app.get("/",async(req,res)=>{
-//     res.sendFile(__dirname+'/public/index/index.html')
-// })
 app.use('/', express.static("public/index"))
 app.use('/login',LoginNotRequired, express.static("public/login"))
 app.use("/signup", LoginNotRequired ,express.static("public/signup"))  

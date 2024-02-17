@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const { validationResult } = require('express-validator');
 
+// function to create a new a/c
 exports.createAccount = async (req, res) => {
     const result = validationResult(req)
     if (!result.isEmpty()) {
@@ -29,6 +30,8 @@ exports.createAccount = async (req, res) => {
     }
 }
 
+
+// function to login
 exports.login = async (req, res) => {
     const result = validationResult(req)
     if (!result.isEmpty()) {
@@ -51,6 +54,7 @@ exports.login = async (req, res) => {
     }
 }
 
+// function to logout
 exports.logout = async (req, res) => {
     try {
         res.cookie("user", "", { httpOnly: true, secure: true, sameSite: "Strict", path: "/" })
@@ -61,6 +65,7 @@ exports.logout = async (req, res) => {
     }
 }
 
+// function to get details
 exports.getDetails = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.id })
